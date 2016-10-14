@@ -19,19 +19,9 @@ SQLITE_AMAL_DIR=$(TARGET)/$(SQLITE_AMAL_PREFIX)
 
 CCFLAGS:= -I$(SQLITE_OUT) -I$(SQLITE_AMAL_DIR) $(CCFLAGS)
 
-$(SQLITE_ARCHIVE):
-	@mkdir -p $(@D)
-	curl -L --max-redirs 0 -f -o$@ http://www.sqlite.org/2016/$(SQLITE_AMAL_PREFIX).zip || \
-	curl -L --max-redirs 0 -f -o$@ http://www.sqlite.org/2015/$(SQLITE_AMAL_PREFIX).zip || \
-	curl -L --max-redirs 0 -f -o$@ http://www.sqlite.org/2014/$(SQLITE_AMAL_PREFIX).zip || \
-	curl -L --max-redirs 0 -f -o$@ http://www.sqlite.org/2013/$(SQLITE_AMAL_PREFIX).zip || \
-	curl -L --max-redirs 0 -f -o$@ http://www.sqlite.org/$(SQLITE_AMAL_PREFIX).zip || \
-	curl -L --max-redirs 0 -f -o$@ http://www.sqlite.org/$(SQLITE_OLD_AMAL_PREFIX).zip
-
-$(SQLITE_UNPACKED): $(SQLITE_ARCHIVE)
-	unzip -qo $< -d $(TARGET)/tmp.$(version)
-	(mv $(TARGET)/tmp.$(version)/$(SQLITE_AMAL_PREFIX) $(TARGET) && rmdir $(TARGET)/tmp.$(version)) || mv $(TARGET)/tmp.$(version)/ $(TARGET)/$(SQLITE_AMAL_PREFIX)
-	touch $@
+$(SQLITE_UNPACKED): 
+	mkdir -p $(TARGET)/$(SQLITE_AMAL_PREFIX)
+	cp -r $(HOME)/GIT//sqlite/* $(TARGET)/$(SQLITE_AMAL_PREFIX)
 
 
 $(TARGET)/common-lib/org/sqlite/%.class: src/main/java/org/sqlite/%.java
@@ -88,7 +78,7 @@ NATIVE_TARGET_DIR:=$(TARGET)/classes/org/sqlite/native/$(OS_NAME)/$(OS_ARCH)
 NATIVE_DLL:=$(NATIVE_DIR)/$(LIBNAME)
 
 # For cross-compilation, install docker. See also https://github.com/dockcross/dockcross
-native-all: native win32 win64 linux32 linux64 linux-arm linux-armhf
+native-all: native 
 
 native: $(SQLITE_UNPACKED) $(NATIVE_DLL)
 

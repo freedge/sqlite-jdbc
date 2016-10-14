@@ -2,6 +2,7 @@ include VERSION
 
 ifndef JAVA_HOME
 $(warning Set JAVA_HOME environment variable)
+JAVA_HOME:=$(HOME)/Downloads/jdk1.8.0_71
 endif
 
 JAVA  := "$$JAVA_HOME/bin/java"
@@ -149,7 +150,7 @@ Windows-x86_64_SQLITE_FLAGS :=
 CC        := $($(target)_CC)
 STRIP     := $($(target)_STRIP)
 CCFLAGS   := $($(target)_CCFLAGS) 
-LINKFLAGS := $($(target)_LINKFLAGS) 
+LINKFLAGS := $($(target)_LINKFLAGS)  -lz
 LIBNAME   := $($(target)_LIBNAME)
 SQLITE_FLAGS := $($(target)_SQLITE_FLAGS)
 SQLITE_AMAL_PREFIX = sqlite-amalgamation-$(shell ./amalgamation_version.sh $(version))
